@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>WebApiDatumok</title>
+    <style>
+        .container {
+            margin: 0 auto;
+            padding: 16px;
+            width: 600px;
+            height: auto;
+            background-color: lightgray;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .box {
+            padding-bottom: 16px;
+            width: 540px;
+            height: auto;
+            background-color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <script>
+
+        $(document).ready(function () {
+            $('#CheckDay').click(function () {
+                var querystr = "date=" + $("#date1").val();
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://localhost:7175/api/checkdate?' + querystr,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (jsondata) {
+                        console.log(jsondata);
+                        alert(jsondata.Result);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+            $('#CheckDates').click(function () {
+                var querystr = "date1=" + $("#date2").val() + "&date2=" + $("#date3").val();
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://localhost:7175/api/countdays?' + querystr,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (jsondata) {
+                        console.log(jsondata);
+                        alert("Munkanapok száma:" + jsondata.Result1 + "\nMunkaszüneti napok száma:" + jsondata.Result2);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+
+    </script>
+    <main>
+        <div class="container">
+            <div class="box">
+                <h4>A választott dátumról megállapítja, hogy munkaszüneti nap vagy nem.</h4>
+                <label for="date1">Dátum</label>
+                <input id="date1" name="date1" type="text">
+                <input id="CheckDay" type="button" value="CheckDay">
+            </div>
+            <hr />
+            <div class="box">
+                <h4>A választott két dátum között megállapítja, hogy hány munkanap és munkaszünetinap van.</h4>
+                <label for="date2">1. Dátum</label>
+                <input id="date2" type="text" ">
+                <label for="date3">2. Dátum</label>
+                <input id="date3" type="text">
+                <input id="CheckDates" type="button" value="CheckDays">
+            </div>
+        </div>
+    </main>
+</body>
+</html>
